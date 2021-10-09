@@ -16,5 +16,5 @@ java -cp . JavaApp
 ## LOGIN
 The following username and password
 combinations can be used to login:
-harry_styles@cinco.com : 123abc
-niall_horan@cinco.com : 456def
+harry_styles@cinco.com : 123abcABC123abcABC12
+niall_horan@cinco.com : 456defDEF456defDEF45
