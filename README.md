@@ -8,9 +8,11 @@ TO acquire packages for your system please see:
 https://openjdk.java.net
 
 ## BUILD
+To build the project from source, from terminal in the 'cincoticket' directory run:
 javac *.java
 
 ## RUN
+Once built, to run the project execute the following terminal command:
 java -cp . JavaApp
 
 ## LOGIN
