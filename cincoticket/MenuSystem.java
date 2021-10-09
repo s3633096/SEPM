@@ -14,22 +14,25 @@ public final class MenuSystem {
 	}
 	
 	public void Start() {
-		System.out.println("Please select from the following options:");
-		System.out.println("1) Login User");
-		System.out.println("2) Reset Password");
-		System.out.println("3) Exit");
+		int option = 0;
 
-		Integer option = captureInputInt("");
-
-		if (option == 1) {
-			Login();
-
-		}
-		else if (option == 2){
-			PasswordReset();
-		}
-		else {
-			Exit();
+		while (option != 3) {
+			System.out.println("Please select from the following options:");
+			System.out.println("1) Login User");
+			System.out.println("2) Reset Password");
+			System.out.println("3) Exit");
+			
+			option = captureInputInt("");
+		
+			if (option == 1) {
+				Login();
+			}
+			
+			else if (option == 2){
+				PasswordReset();
+			}
+			
+			else Exit();
 		}
 	}
 
@@ -49,7 +52,7 @@ public final class MenuSystem {
 
 		for (int i = 0; i < users.length; i++) {
 			if (email.trim().toLowerCase().equals(users[i].getEmail())) {
-				if (password.trim().toLowerCase().equals(users[i].getPassword())) {
+				if (password.equals(users[i].getPassword())) {
 					active_user = users[i];
 				}
 				else break;
@@ -57,7 +60,7 @@ public final class MenuSystem {
 		}
 
 		if (active_user != null) {
-			// Successfull login;
+			// Successful login;
 			ShowWelcomeScreen();
 		} else {
 			System.out.println("Unable to login with provided credentials");
@@ -69,18 +72,30 @@ public final class MenuSystem {
 		System.out.println("-------------------------");
 		System.out.println(" Welcome " + active_user.getEmail() );
 		System.out.println("-------------------------");
-		System.out.println("Please select from the following options:");
-		System.out.println("1) Create a Ticket");
-		System.out.println("2) Exit");
 
-		Integer option = captureInputInt("");
+		int option = 0;
 
-		if (option == 1) {
-			CreateTicket();
+		while (option != 3) {
+			System.out.println("Please select from the following options:");
+			System.out.println("1) Create a Ticket");
+			System.out.println("2) Change your password");
+			System.out.println("3) Log Out");
+
+			option = captureInputInt("");
+			
+			if (option == 1) {
+				CreateTicket();
+			}
+			if (option == 2) {
+				ChangePassword();
+			}
+			else {
+				active_user = null;
+				System.out.println("Logging out...");
+				return;
+			}
 		}
-		else {
-			Exit();
-		}
+
 	}
 
 	private void PasswordReset() {
@@ -89,7 +104,36 @@ public final class MenuSystem {
 
 		System.out.println("A temporary password has been sent to : " + reset_email);
 
-		Start();
+		return;
+	}
+	
+	private void ChangePassword() {
+		System.out.println("Please enter a new password for " + active_user.getEmail());
+		String newPassword = captureInputString("> ");
+
+		if (validatePassword(newPassword)) {
+			active_user.setPassword(newPassword);
+			System.out.println("Password successfully changed");
+			return;
+		}
+
+		else {
+			System.out.println("Password not updated as it didn't meet the required conditions");
+			System.out.println("Password must contain a minimum of 20 characters, including 1 upper case character,"
+					+ " 1 lower case character, and 1 number.");
+			return;
+		}
+	}
+	
+	private boolean validatePassword(String password) {
+		// Min 20 chars, at least 1 upper case, 1 lower case and 1 number
+		String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{20,}$";
+		
+		if (password.matches(regex)) 
+			return true;
+		
+		else 
+			return false;
 	}
 
 	private void CreateTicket() {
@@ -105,7 +149,7 @@ public final class MenuSystem {
 	}
 
 	private int captureInputInt(String userMessage) {
-		// handles the user input and returns and int
+		// handles the user input and returns an int
 		System.out.print(userMessage + " ");
 		
 		int capturedInt;
@@ -140,6 +184,7 @@ public final class MenuSystem {
 	}
 
 	private void Exit() {
+		System.out.println("Exiting application...");
 		return;
 	}
 
