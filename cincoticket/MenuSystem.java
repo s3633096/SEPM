@@ -1,16 +1,20 @@
 import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
 
 public final class MenuSystem {
 	
 	private Scanner userInputScanner;
 	private User[] users = new User[5];
 	private User active_user;
+	private List<Ticket> tickets = new ArrayList<Ticket>();
 	
 	
 	public MenuSystem() {
 		this.userInputScanner = new Scanner(System.in);
 
 		SeedUsers();
+		SeedTickets();
 	}
 	
 	public void Start() {
@@ -38,11 +42,33 @@ public final class MenuSystem {
 
 	
 	private void SeedUsers() {
-		users[0] = new User("harry_styles@cinco.com", "Harry Styles", "0400123456", "123abcABC123abcABC12");
-		users[1] = new User("niall_horan@cinco.com", "Niall Horan", "0400125555", "456defDEF456defDEF45");
-		users[2] = new User("liam_payne@cinco.com", "Liam Payne", "0404123499", "789ghiGHI789ghiGHI78");
-		users[3] = new User("louis_tomlinson@cinco.com", "Louis Tomlinson", "0407126456", "cba321CBA321cbaCBA32");
-		users[4] = new User("zayn_malik@cinco.com", "Zayn Malik", "0411223456", "654fedFED654fedFED65");
+		users[0] = new User("harry_styles@cinco.com", "Harry Styles", "0400123456", "123abcABC123abcABC12", true, false);
+		users[1] = new User("niall_horan@cinco.com", "Niall Horan", "0400125555", "456defDEF456defDEF45", false, true);
+		users[2] = new User("liam_payne@cinco.com", "Liam Payne", "0404123499", "789ghiGHI789ghiGHI78", false, true);
+		users[3] = new User("louis_tomlinson@cinco.com", "Louis Tomlinson", "0407126456", "cba321CBA321cbaCBA32", false, true);
+		users[4] = new User("zayn_malik@cinco.com", "Zayn Malik", "0411223456", "654fedFED654fedFED65", false, true);
+	}
+
+	private void SeedTickets() {
+		// tickets.add(new Ticket("High severity test ticket", 1, "harry_styles@cinco.com"));
+		// tickets.add(new Ticket("High severity test ticket", 1, "harry_styles@cinco.com"));
+		// tickets.add(new Ticket("Low severity test ticket", 3, "harry_styles@cinco.com"));
+
+		tickets.add(new Ticket("Low severity test ticket", 3, "niall_horan@cinco.com"));
+		tickets.add(new Ticket("Medium severity test ticket", 2, "niall_horan@cinco.com"));
+		tickets.add(new Ticket("Low severity test ticket", 3, "niall_horan@cinco.com"));
+
+		tickets.add(new Ticket("Medium severity test ticket", 2, "liam_payne@cinco.com"));
+		tickets.add(new Ticket("Medium severity test ticket", 2, "liam_payne@cinco.com"));
+		tickets.add(new Ticket("Low severity test ticket", 3, "liam_payne@cinco.com"));
+
+		tickets.add(new Ticket("High severity test ticket", 1, "louis_tomlinson@cinco.com"));
+		tickets.add(new Ticket("Medium severity test ticket", 2, "louis_tomlinson@cinco.com"));
+		tickets.add(new Ticket("Low severity test ticket", 3, "louis_tomlinson@cinco.com"));
+
+		tickets.add(new Ticket("High severity test ticket", 1, "zayn_malik@cinco.com"));
+		tickets.add(new Ticket("Medium severity test ticket", 2, "zayn_malik@cinco.com"));
+		tickets.add(new Ticket("Low severity test ticket", 3, "zayn_malik@cinco.com"));
 	}
 	
 	private void Login() {
@@ -69,22 +95,38 @@ public final class MenuSystem {
 	}
 
 	private void ShowWelcomeScreen() {
-		System.out.println("-------------------------");
-		System.out.println(" Welcome " + active_user.getEmail() );
-		System.out.println("-------------------------");
-
+		if (active_user != null) {
+			System.out.println("");
+			System.out.println("------------------------------------------");
+			System.out.println(" Welcome " + active_user.getEmail() );
+			System.out.println("------------------------------------------");
+		}
 		int option = 0;
 
 		while (option != 3) {
+			System.out.println("");
 			System.out.println("Please select from the following options:");
-			System.out.println("1) Create a Ticket");
+			if(active_user.isAdmin()) {
+				System.out.println("1) Create a Ticket");
+			}
+			else if(active_user.isTech()) {
+				System.out.println("1) View open tickets");
+			}
+
 			System.out.println("2) Change your password");
 			System.out.println("3) Log Out");
 
 			option = captureInputInt("");
 			
 			if (option == 1) {
-				CreateTicket();
+				if(active_user.isAdmin()) {
+					CreateTicket();
+				}
+				else {
+					if (active_user.isTech()) {
+						ShowOpenTickets();
+					}
+				}
 			}
 			if (option == 2) {
 				ChangePassword();
@@ -99,6 +141,7 @@ public final class MenuSystem {
 	}
 
 	private void PasswordReset() {
+		System.out.println("");
 		System.out.println("Please provide the email for the account");
 		String reset_email = captureInputString("> ");
 
@@ -108,6 +151,7 @@ public final class MenuSystem {
 	}
 	
 	private void ChangePassword() {
+		System.out.println("");
 		System.out.println("Please enter a new password for " + active_user.getEmail());
 		String newPassword = captureInputString("> ");
 
@@ -143,7 +187,28 @@ public final class MenuSystem {
 
 		int input_priority = captureInputInt("Priority: 1 (high), 2 (med), 3 (low)");
 
-		System.out.println("The ticket has been added to the queue");
+		this.tickets.add(new Ticket(input_description, input_priority, active_user.getEmail()));
+
+		System.out.println("The ticket has been added to the queue.");
+
+		ShowOpenTickets();
+
+		ShowWelcomeScreen();
+	}
+
+	private void ShowOpenTickets() {
+		System.out.println("");
+		System.out.println("------------------------------------------");
+		System.out.println("The following tickets are assigned to you:");
+
+		this.tickets.sort((t1, t2) -> t1.getSeverity() - t2.getSeverity());
+
+		for (Ticket t : tickets) {
+			if (t.getOwnerEmail().equals(this.active_user.getEmail())) {
+				System.out.println(t.getSeverity() + ") " + t.getDescription());
+			}
+		}
+		System.out.println("");
 
 		ShowWelcomeScreen();
 	}
@@ -151,7 +216,7 @@ public final class MenuSystem {
 	private int captureInputInt(String userMessage) {
 		// handles the user input and returns an int
 		System.out.print(userMessage + " ");
-		
+		this.userInputScanner = new Scanner(System.in);
 		int capturedInt;
 		try {
 			capturedInt = userInputScanner.nextInt();
@@ -167,10 +232,11 @@ public final class MenuSystem {
 	private String captureInputString(String userMessage) {
 		// handles the user input and returns a string
 		System.out.print(userMessage + " ");
-		
+
+		this.userInputScanner = new Scanner(System.in);
 		String capturedStr;
 		try {
-			capturedStr = userInputScanner.next();
+			capturedStr = userInputScanner.nextLine();
 			return capturedStr;
 		} catch (Exception ex) {
 			showInvalidOption();
