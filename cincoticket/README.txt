@@ -35,3 +35,19 @@ niall_horan@cinco.com : 456defDEF456defDEF45
 12. Copy the corresponding password and paste in Terminal. Press Enter
 13. From the user menu select 1
 
+## CLIENT TESTING
+To test the Admin feature 'Create a ticket' please login with
+username: harry_styles@cinco.com 
+password: 123abcABC123abcABC12
+From the Welcome Screen choose (1) Create a Ticket.
+The system will prompt for a description and severity rating
+Once the ticket has been create it will be added to the admins queue 
+pending assignment to a technician.  The list of tickets is 
+shown when a new ticket is created.
+
+To test the Technician feature 'View open tickets' please login with
+username: niall_horan@cinco.com
+password: 456defDEF456defDEF45
+From the Welcome Screen choose (1) View Open Tickets.
+The system with then list all open tickets assigned to the user
+in order of severity. 
