@@ -152,7 +152,8 @@ public final class MenuSystem {
 	
 	private void ChangePassword() {
 		System.out.println("");
-		System.out.println("Please enter a new password for " + active_user.getEmail());
+		System.out.println("Please enter a new password for " + active_user.getEmail() + ". Password must contain a "
+				+ "minimum of 20 characters, including 1 upper case character, 1 lower case character, and 1 number.");
 		String newPassword = captureInputString("> ");
 
 		if (validatePassword(newPassword)) {

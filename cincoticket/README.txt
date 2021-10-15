@@ -51,3 +51,14 @@ password: 456defDEF456defDEF45
 From the Welcome Screen choose (1) View Open Tickets.
 The system with then list all open tickets assigned to the user
 in order of severity. 
+
+To test the 'Change your Password' feature, login with a valid account listed
+above, and then select option 2) Change your password. Required conditions
+will be shown and the password will only change successfully if those conditions
+are met. If it fails an error message will be shown and the user directed back to
+their menu. If it succeeds a success message will be shown and now future logins 
+for this user will use the new password.
+*Note that as we have not implemented a database yet, the change will only
+pertain to the current session of the application.
+*Also note that this is separate to the 'Reset Password' feature which appears on
+the screen BEFORE logging in.
