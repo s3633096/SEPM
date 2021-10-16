@@ -37,7 +37,7 @@ niall_horan@cinco.com : 456defDEF456defDEF45
 
 ## CLIENT TESTING
 To test the Admin feature 'Create a ticket' please login with
-username: harry_styles@cinco.com 
+username: harry_styles@cinco.com
 password: 123abcABC123abcABC12
 From the Welcome Screen choose (1) Create a Ticket.
 The system will prompt for a description and severity rating
@@ -60,5 +60,3 @@ their menu. If it succeeds a success message will be shown and now future logins
 for this user will use the new password.
 *Note that as we have not implemented a database yet, the change will only
 pertain to the current session of the application.
-*Also note that this is separate to the 'Reset Password' feature which appears on
-the screen BEFORE logging in.

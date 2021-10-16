@@ -20,11 +20,10 @@ public final class MenuSystem {
 	public void Start() {
 		int option = 0;
 
-		while (option != 3) {
+		while (option != 2) {
 			System.out.println("Please select from the following options:");
 			System.out.println("1) Login User");
-			System.out.println("2) Reset Password");
-			System.out.println("3) Exit");
+			System.out.println("2) Exit");
 			
 			option = captureInputInt("");
 		
@@ -32,11 +31,12 @@ public final class MenuSystem {
 				Login();
 			}
 			
-			else if (option == 2){
-				PasswordReset();
-			}
+			else if (option == 2)
+				Exit();
 			
-			else Exit();
+			else {
+				showInvalidOption();
+			}
 		}
 	}
 
@@ -100,54 +100,50 @@ public final class MenuSystem {
 			System.out.println("------------------------------------------");
 			System.out.println(" Welcome " + active_user.getEmail() );
 			System.out.println("------------------------------------------");
-		}
-		int option = 0;
 
-		while (option != 3) {
-			System.out.println("");
-			System.out.println("Please select from the following options:");
-			if(active_user.isAdmin()) {
-				System.out.println("1) Create a Ticket");
-			}
-			else if(active_user.isTech()) {
-				System.out.println("1) View open tickets");
-			}
+			int option = 0;
 
-			System.out.println("2) Change your password");
-			System.out.println("3) Log Out");
-
-			option = captureInputInt("");
-			
-			if (option == 1) {
-				if(active_user.isAdmin()) {
-					CreateTicket();
+			while (option != 3) {
+				if (active_user == null) {
+					return;
 				}
-				else {
-					if (active_user.isTech()) {
-						ShowOpenTickets();
+				System.out.println("");
+				System.out.println("Please select from the following options:");
+				if(active_user.isAdmin()) {
+					System.out.println("1) Create a Ticket");
+				}
+				else if(active_user.isTech()) {
+					System.out.println("1) View open tickets");
+				}
+	
+				System.out.println("2) Change your password");
+				System.out.println("3) Log Out");
+	
+				option = captureInputInt("");
+				
+				if (option == 1) {
+					if(active_user.isAdmin()) {
+						CreateTicket();
+					}
+					else {
+						if (active_user.isTech()) {
+							ShowOpenTickets();
+						}
 					}
 				}
-			}
-			if (option == 2) {
-				ChangePassword();
-			}
-			else {
-				active_user = null;
-				System.out.println("Logging out...");
-				return;
+				else if (option == 2) {
+					ChangePassword();
+				}
+				else if (option == 3){
+					active_user = null;
+					System.out.println("Logging out...");
+					return;
+				}
+				else {
+					showInvalidOption();
+				}
 			}
 		}
-
-	}
-
-	private void PasswordReset() {
-		System.out.println("");
-		System.out.println("Please provide the email for the account");
-		String reset_email = captureInputString("> ");
-
-		System.out.println("A temporary password has been sent to : " + reset_email);
-
-		return;
 	}
 	
 	private void ChangePassword() {
@@ -223,7 +219,6 @@ public final class MenuSystem {
 			capturedInt = userInputScanner.nextInt();
 			return capturedInt;
 		} catch (Exception ex) {
-			showInvalidOption();
 			userInputScanner.nextLine();
 			return 0;
 		}
@@ -247,7 +242,7 @@ public final class MenuSystem {
 	}
 	
 	private void showInvalidOption() {
-		System.out.println("Please select a valid menu option.");
+		System.out.println("Invalid menu option.");
 	}
 
 	private void Exit() {
