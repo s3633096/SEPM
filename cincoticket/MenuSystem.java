@@ -5,14 +5,12 @@ import java.util.ArrayList;
 public final class MenuSystem {
 	
 	private Scanner userInputScanner;
-	private User[] users = new User[5];
-	private User active_user;
+	private List<User> users = new ArrayList<User>();
 	private List<Ticket> tickets = new ArrayList<Ticket>();
-	
+	private User active_user;
 	
 	public MenuSystem() {
 		this.userInputScanner = new Scanner(System.in);
-
 		SeedUsers();
 		SeedTickets();
 	}
@@ -20,16 +18,16 @@ public final class MenuSystem {
 	public void Start() {
 		int option = 0;
 
-		while (option != 2) {
+		while (option != 4) {
 			System.out.println("Please select from the following options:");
-			System.out.println("1) Create User");
-			System.out.println("2) Login User");
+			System.out.println("1) Create Staff Account");
+			System.out.println("2) Login");
 			System.out.println("3) Change Password");
 			System.out.println("4) Exit");
 			
 			option = captureInputInt("");
 			if (option == 1) {
-				CreateUser();
+				CreateStaffAccount();
 			}
 			else if (option == 2) {
 				Login();
@@ -48,17 +46,22 @@ public final class MenuSystem {
 
 	
 	private void SeedUsers() {
-		users[0] = new User("harry_styles@cinco.com", "Harry Styles", "0400123456", "123abcABC123abcABC12", true, false);
-		users[1] = new User("niall_horan@cinco.com", "Niall Horan", "0400125555", "456defDEF456defDEF45", false, true);
-		users[2] = new User("liam_payne@cinco.com", "Liam Payne", "0404123499", "789ghiGHI789ghiGHI78", false, true);
-		users[3] = new User("louis_tomlinson@cinco.com", "Louis Tomlinson", "0407126456", "cba321CBA321cbaCBA32", false, true);
-		users[4] = new User("zayn_malik@cinco.com", "Zayn Malik", "0411223456", "654fedFED654fedFED65", false, true);
+		//Techs as mentioned in spec sheet
+		users.add(new User("harry_styles@cinco.com", "Harry Styles", "0400123456", "123abcABC123abcABC12", 1));
+		users.add(new User("niall_horan@cinco.com", "Niall Horan", "0400125555", "456defDEF456defDEF45", 1));
+		users.add(new User("liam_payne@cinco.com", "Liam Payne", "0404123499", "789ghiGHI789ghiGHI78", 1));
+		users.add(new User("louis_tomlinson@cinco.com", "Louis Tomlinson", "0407126456", "cba321CBA321cbaCBA32", 2));
+		users.add(new User("zayn_malik@cinco.com", "Zayn Malik", "0411223456", "654fedFED654fedFED65", 2));
+		
+		//Sample Staff Members
+		users.add(new User("john_citizen@cinco.com", "John Citizen", "0400444666", "ZXCVBNMasdfghjkl123456", 0));
+		users.add(new User("fred_jones@cinco.com", "Fred Jones", "0400555899", "ASDFGHJKqwertyu1234678", 0));
 	}
 
 	private void SeedTickets() {
-		// tickets.add(new Ticket("High severity test ticket", 1, "harry_styles@cinco.com"));
-		// tickets.add(new Ticket("High severity test ticket", 1, "harry_styles@cinco.com"));
-		// tickets.add(new Ticket("Low severity test ticket", 3, "harry_styles@cinco.com"));
+		tickets.add(new Ticket("High severity test ticket", 1, "harry_styles@cinco.com"));
+		tickets.add(new Ticket("High severity test ticket", 1, "harry_styles@cinco.com"));
+		tickets.add(new Ticket("Low severity test ticket", 3, "harry_styles@cinco.com"));
 
 		tickets.add(new Ticket("Low severity test ticket", 3, "niall_horan@cinco.com"));
 		tickets.add(new Ticket("Medium severity test ticket", 2, "niall_horan@cinco.com"));
@@ -77,8 +80,40 @@ public final class MenuSystem {
 		tickets.add(new Ticket("Low severity test ticket", 3, "zayn_malik@cinco.com"));
 	}
 
-	private void CreateUser() {
-		return;
+	private void CreateStaffAccount() {
+		System.out.println("Enter account creation details below.");
+		String input_email = captureInputString("Email Address: ");
+		String input_name = captureInputString("Full Name: ");
+		String input_phone = captureInputString("Phone Number: ");
+		
+		System.out.println("Now choose a password with a minimum length of 20 characters, "
+				+ "including 1 uppercase letter, 1 lowercase letter, and 1 number.");
+
+		boolean passwordConfirmed = false;
+		String input_password = "";
+		
+		while (passwordConfirmed == false) {
+			input_password = captureInputString("Enter Password: ");
+			while (!validatePassword(input_password)) {
+				System.out.println("Password did not meet the required conditions. Please enter a "
+						+ "password with a minimum length of 20 characters, including at least 1 "
+						+ "uppercase letter, 1 lowercase letter, and 1 number.");
+				input_password = captureInputString("Enter Password: ");
+			}
+			
+			String input_password_confirm = captureInputString("Confirm Password: ");
+			
+			if (input_password_confirm.equals(input_password)) {
+				passwordConfirmed = true;
+			}
+			else {
+				System.out.println("Passwords did not match. Please try again.");
+			}
+		}
+		
+		users.add(new User(input_email, input_name, input_phone, input_password, 0));
+		System.out.println(String.format("\nStaff account created successfully.\nEmail: %s\nName: %s\nPhone: "
+				+ "%s\nPassword: %s\n", input_email, input_name, input_phone, input_password));
 	}
 	
 	private void Login() {
@@ -86,10 +121,10 @@ public final class MenuSystem {
 		String email = captureInputString("Username: ");
 		String password = captureInputString("Password: ");
 
-		for (int i = 0; i < users.length; i++) {
-			if (email.trim().toLowerCase().equals(users[i].getEmail())) {
-				if (password.equals(users[i].getPassword())) {
-					active_user = users[i];
+		for (User u : users) {
+			if (email.trim().toLowerCase().equals(u.getEmail())) {
+				if (password.equals(u.getPassword())) {
+					active_user = u;
 				}
 				else break;
 			}
@@ -119,7 +154,7 @@ public final class MenuSystem {
 				}
 				System.out.println("");
 				System.out.println("Please select from the following options:");
-				if(active_user.isAdmin()) {
+				if(!active_user.isTech()) {
 					System.out.println("1) Create a Ticket");
 				}
 				else if(active_user.isTech()) {
@@ -132,7 +167,7 @@ public final class MenuSystem {
 				option = captureInputInt("");
 				
 				if (option == 1) {
-					if(active_user.isAdmin()) {
+					if(!active_user.isTech()) {
 						CreateTicket();
 					}
 					else {
@@ -147,37 +182,47 @@ public final class MenuSystem {
 				else if (option == 3){
 					active_user = null;
 					System.out.println("Logging out...");
-					return;
 				}
 				else {
 					showInvalidOption();
 				}
 			}
+			return;
 		}
 	}
 	
 	private void ChangePassword() {
-		System.out.println("");
 
-		String recovery_email = captureInputString("Please enter your account email: ").trim().toLowerCase();
-
-		for (User u : users) {
-			if (recovery_email.equals(u.getEmail())) {
-				active_user = u;
+		String recovery_email;
+		User user = null;
+		
+		if(active_user != null) {
+			user = active_user;
+		}
+		else {
+			System.out.println("");
+			recovery_email = captureInputString("Please enter your account email: ").trim().toLowerCase();
+			
+			for (User u : users) {
+				if (recovery_email.equals(u.getEmail())) {
+					user = u;
+					break;
+				}
 			}
-		}
-		if (active_user == null) {
-			System.out.println("Unable to find a user account with that email\n");
-			return;
-		}
+			
+			if (user == null) {
+				System.out.println("Unable to find a user account with that email\n");
+				return;
+			}
+		}		
 
 
-		System.out.println("Please enter a new password for " + active_user.getEmail() + ".\n Password must contain a "
+		System.out.println("Please enter a new password for " + user.getEmail() + ".\n Password must contain a "
 				+ "minimum of 20 characters, including 1 upper case character, 1 lower case character, and 1 number.\n");
 		String newPassword = captureInputString("> ");
 
 		if (validatePassword(newPassword)) {
-			active_user.setPassword(newPassword);
+			user.setPassword(newPassword);
 			System.out.println("Password successfully changed\n");
 			return;
 		}
@@ -213,8 +258,6 @@ public final class MenuSystem {
 		System.out.println("The ticket has been added to the queue.");
 
 		ShowOpenTickets();
-
-		ShowWelcomeScreen();
 	}
 
 	private void ShowOpenTickets() {

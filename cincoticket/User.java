@@ -4,16 +4,16 @@ public class User {
 	private String name;
 	private String phone;
 	private String password;
-	private boolean isAdmin;
-	private boolean isTech;
+	private int technician;
 	
-	public User(String email, String name, String phone, String password, boolean isAdmin, boolean isTech) {
+	// @Jesse, I changed technician marker to an int. Logic will be 0 = Staff Member, 1 = L1 Tech, 2 = L2 Tech.
+	
+	public User(String email, String name, String phone, String password, int technician) {
 		this.email = email;
 		this.name = name;
 		this.phone = phone;
 		this.password = password;
-		this.isAdmin = isAdmin;
-		this.isTech = isTech;
+		this.technician = technician;
 	}
 	
 	public String getEmail() {
@@ -36,11 +36,14 @@ public class User {
 		password = newPassword;
 	}
 
-	public boolean isAdmin() {
-		return isAdmin;
+	public int getTechnicianLevel() {
+		return technician;
 	}
-
+	
 	public boolean isTech() {
-		return isTech;
+		if (technician > 0) 
+			return true;
+		else 
+			return false;
 	}
 }
