@@ -1,18 +1,16 @@
 ## INTRODUCTION
-This is the project folder for the CincoTickets Support ticketing system. This file describes how to build and run the project.
-
+This is the project folder for the CincoTickets Support ticketing system.
+This file describes how to build and run the project.
 
 ## DEPENDENCIES
-This project requires a JDK environment of 8 or higher. To acquire packages for your system please see: https://openjdk.java.net
-
+This project requires a JDK environment of 8 or higher. To acquire
+packages for your system please see: https://openjdk.java.net
 
 ## BUILD
 javac *.java
 
-
 ## RUN
 java -cp . JavaApp
-
 
 ## USE
 ### Staff Member Account Creation
@@ -41,25 +39,25 @@ The following credentials are currently hardcoded
 and can be used to access technician accounts.
 Their technician levels are also noted below.
 
-- Email: 	harry_styles@cinco.com  
-  Password: 	123abcABC123abcABC12  
-  Level:	1  
+- Email: 	harry_styles@cinco.com
+  Password: 	123abcABC123abcABC12
+  Level:	1
 
-- Email: 	niall_horan@cinco.com  
-  Password: 	456defDEF456defDEF45  
-  Level:	1  
+- Email: 	niall_horan@cinco.com
+  Password: 	456defDEF456defDEF45
+  Level:	1
 
-- Email: 	liam_payne@cinco.com  
-  Password: 	789ghiGHI789ghiGHI78  
-  Level:	1  
+- Email: 	liam_payne@cinco.com
+  Password: 	789ghiGHI789ghiGHI78
+  Level:	1
 
-- Email: 	louis_tomlinson@cinco.com  
-  Password: 	cba321CBA321cbaCBA32  
-  Level:	2  
+- Email: 	louis_tomlinson@cinco.com
+  Password: 	cba321CBA321cbaCBA32
+  Level:	2
 
-- Email: 	zayn_malik@cinco.com  
-  Password: 	654fedFED654fedFED65  
-  Level:	2  
+- Email: 	zayn_malik@cinco.com
+  Password: 	654fedFED654fedFED65
+  Level:	2
 
 ### Change Password
 Whilst logged out, from the main menu, select option 3) Change Password. 
@@ -67,8 +65,9 @@ Enter the email address for the account whose password you want to change
 and then enter and confirm the new password in the following prompts.
 Passwords must comply with validation requirements (see below).
 
-Additionally, whilst logged in, the active user can change their password by choosing
-option 3) Change your Password from their menu. The same rules as above apply.
+Additionally, whilst logged in, the active user can change their password 
+by choosing option '3' Change your Password from their menu. The same rules 
+as above apply.
 
 ### Password validation requirements
 The current password requirements for Cinco are as follows:
