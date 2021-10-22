@@ -22,16 +22,22 @@ public final class MenuSystem {
 
 		while (option != 2) {
 			System.out.println("Please select from the following options:");
-			System.out.println("1) Login User");
-			System.out.println("2) Exit");
+			System.out.println("1) Create User");
+			System.out.println("2) Login User");
+			System.out.println("3) Change Password");
+			System.out.println("4) Exit");
 			
 			option = captureInputInt("");
-		
 			if (option == 1) {
+				CreateUser();
+			}
+			else if (option == 2) {
 				Login();
 			}
-			
-			else if (option == 2)
+			else if (option == 3) {
+				ChangePassword();
+			}
+			else if (option == 4)
 				Exit();
 			
 			else {
@@ -69,6 +75,10 @@ public final class MenuSystem {
 		tickets.add(new Ticket("High severity test ticket", 1, "zayn_malik@cinco.com"));
 		tickets.add(new Ticket("Medium severity test ticket", 2, "zayn_malik@cinco.com"));
 		tickets.add(new Ticket("Low severity test ticket", 3, "zayn_malik@cinco.com"));
+	}
+
+	private void CreateUser() {
+		return;
 	}
 	
 	private void Login() {
@@ -148,20 +158,34 @@ public final class MenuSystem {
 	
 	private void ChangePassword() {
 		System.out.println("");
-		System.out.println("Please enter a new password for " + active_user.getEmail() + ". Password must contain a "
-				+ "minimum of 20 characters, including 1 upper case character, 1 lower case character, and 1 number.");
+
+		String recovery_email = captureInputString("Please enter your account email: ").trim().toLowerCase();
+
+		for (User u : users) {
+			if (recovery_email.equals(u.getEmail())) {
+				active_user = u;
+			}
+		}
+		if (active_user == null) {
+			System.out.println("Unable to find a user account with that email\n");
+			return;
+		}
+
+
+		System.out.println("Please enter a new password for " + active_user.getEmail() + ".\n Password must contain a "
+				+ "minimum of 20 characters, including 1 upper case character, 1 lower case character, and 1 number.\n");
 		String newPassword = captureInputString("> ");
 
 		if (validatePassword(newPassword)) {
 			active_user.setPassword(newPassword);
-			System.out.println("Password successfully changed");
+			System.out.println("Password successfully changed\n");
 			return;
 		}
 
 		else {
 			System.out.println("Password not updated as it didn't meet the required conditions");
 			System.out.println("Password must contain a minimum of 20 characters, including 1 upper case character,"
-					+ " 1 lower case character, and 1 number.");
+					+ " 1 lower case character, and 1 number.\n");
 			return;
 		}
 	}
