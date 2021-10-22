@@ -1,6 +1,8 @@
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public final class MenuSystem {
 	
@@ -59,25 +61,25 @@ public final class MenuSystem {
 	}
 
 	private void SeedTickets() {
-		tickets.add(new Ticket("High severity test ticket", 1, "harry_styles@cinco.com"));
-		tickets.add(new Ticket("High severity test ticket", 1, "harry_styles@cinco.com"));
-		tickets.add(new Ticket("Low severity test ticket", 3, "harry_styles@cinco.com"));
+		tickets.add(new Ticket("High severity test ticket", 1, "john_citizen@cinco.com", "harry_styles@cinco.com"));
+		tickets.add(new Ticket("High severity test ticket", 1, "fred_jones@cinco.com", "harry_styles@cinco.com"));
+		tickets.add(new Ticket("Low severity test ticket", 3, "john_citizen@cinco.com", "harry_styles@cinco.com"));
 
-		tickets.add(new Ticket("Low severity test ticket", 3, "niall_horan@cinco.com"));
-		tickets.add(new Ticket("Medium severity test ticket", 2, "niall_horan@cinco.com"));
-		tickets.add(new Ticket("Low severity test ticket", 3, "niall_horan@cinco.com"));
+		tickets.add(new Ticket("Low severity test ticket", 3, "fred_jones@cinco.com", "niall_horan@cinco.com"));
+		tickets.add(new Ticket("Medium severity test ticket", 2, "john_citizen@cinco.com", "niall_horan@cinco.com"));
+		tickets.add(new Ticket("Low severity test ticket", 3, "fred_jones@cinco.com", "niall_horan@cinco.com"));
 
-		tickets.add(new Ticket("Medium severity test ticket", 2, "liam_payne@cinco.com"));
-		tickets.add(new Ticket("Medium severity test ticket", 2, "liam_payne@cinco.com"));
-		tickets.add(new Ticket("Low severity test ticket", 3, "liam_payne@cinco.com"));
+		tickets.add(new Ticket("Medium severity test ticket", 2, "john_citizen@cinco.com", "liam_payne@cinco.com"));
+		tickets.add(new Ticket("Medium severity test ticket", 2, "fred_jones@cinco.com", "liam_payne@cinco.com"));
+		tickets.add(new Ticket("Low severity test ticket", 3, "john_citizen@cinco.com", "liam_payne@cinco.com"));
 
-		tickets.add(new Ticket("High severity test ticket", 1, "louis_tomlinson@cinco.com"));
-		tickets.add(new Ticket("Medium severity test ticket", 2, "louis_tomlinson@cinco.com"));
-		tickets.add(new Ticket("Low severity test ticket", 3, "louis_tomlinson@cinco.com"));
+		tickets.add(new Ticket("High severity test ticket", 1, "fred_jones@cinco.com", "louis_tomlinson@cinco.com"));
+		tickets.add(new Ticket("Medium severity test ticket", 2, "john_citizen@cinco.com", "louis_tomlinson@cinco.com"));
+		tickets.add(new Ticket("Low severity test ticket", 3, "fred_jones@cinco.com", "louis_tomlinson@cinco.com"));
 
-		tickets.add(new Ticket("High severity test ticket", 1, "zayn_malik@cinco.com"));
-		tickets.add(new Ticket("Medium severity test ticket", 2, "zayn_malik@cinco.com"));
-		tickets.add(new Ticket("Low severity test ticket", 3, "zayn_malik@cinco.com"));
+		tickets.add(new Ticket("High severity test ticket", 1, "john_citizen@cinco.com", "zayn_malik@cinco.com"));
+		tickets.add(new Ticket("Medium severity test ticket", 2, "fred_jones@cinco.com", "zayn_malik@cinco.com"));
+		tickets.add(new Ticket("Low severity test ticket", 3, "john_citizen@cinco.com", "zayn_malik@cinco.com"));
 	}
 
 	private void CreateStaffAccount() {
@@ -156,35 +158,51 @@ public final class MenuSystem {
 				System.out.println("Please select from the following options:");
 				if(!active_user.isTech()) {
 					System.out.println("1) Create a Ticket");
+					System.out.println("2) Change your password");
+					System.out.println("3) Log Out");
 				}
 				else if(active_user.isTech()) {
 					System.out.println("1) View open tickets");
+					System.out.println("2) Change your password");
+					System.out.println("3) Create Ticket Report");
+					System.out.println("4) Log Out");
 				}
-	
-				System.out.println("2) Change your password");
-				System.out.println("3) Log Out");
+				
 	
 				option = captureInputInt("");
-				
-				if (option == 1) {
-					if(!active_user.isTech()) {
+
+				if(!active_user.isTech()) {
+					if (option == 1) {
 						CreateTicket();
 					}
+					else if (option == 2) {
+						ChangePassword();
+					}
+					else if (option == 3){
+						active_user = null;
+						System.out.println("Logging out...");
+					}
 					else {
-						if (active_user.isTech()) {
-							ShowOpenTickets();
-						}
+						showInvalidOption();
 					}
 				}
-				else if (option == 2) {
-					ChangePassword();
-				}
-				else if (option == 3){
-					active_user = null;
-					System.out.println("Logging out...");
-				}
 				else {
-					showInvalidOption();
+					if (option == 1) {
+						ShowUserTickets();
+					}
+					else if (option == 2) {
+						ChangePassword();
+					}
+					else if (option == 3) {
+						ShowTicketReport();
+					}
+					else if (option == 4){
+						active_user = null;
+						System.out.println("Logging out...");
+					}
+					else {
+						showInvalidOption();
+					}
 				}
 			}
 			return;
@@ -192,7 +210,6 @@ public final class MenuSystem {
 	}
 	
 	private void ChangePassword() {
-
 		String recovery_email;
 		User user = null;
 		
@@ -253,33 +270,147 @@ public final class MenuSystem {
 
 		int input_priority = captureInputInt("Priority: 1 (high), 2 (med), 3 (low)");
 
-		this.tickets.add(new Ticket(input_description, input_priority, active_user.getEmail()));
+		this.tickets.add(new Ticket(input_description, input_priority, active_user.getEmail(), active_user.getEmail()));
 
 		System.out.println("The ticket has been added to the queue.");
 
-		ShowOpenTickets();
+		ShowUserTickets();
 	}
 
-	private void ShowOpenTickets() {
+	private void ShowUserTickets() {
 		System.out.println("");
 		System.out.println("------------------------------------------");
-		System.out.println("The following tickets are assigned to you:");
+		System.out.println("The following tickets are assigned to you:\n");
 
 		this.tickets.sort((t1, t2) -> t1.getSeverity() - t2.getSeverity());
 
+		List<Ticket> usersTickets = new ArrayList<Ticket>();
+
+		int i = 1; // matches ticket index in list
 		for (Ticket t : tickets) {
-			if (t.getOwnerEmail().equals(this.active_user.getEmail())) {
-				System.out.println(t.getSeverity() + ") " + t.getDescription());
+			if (t.getOwnerEmail().equals(this.active_user.getEmail()) 
+			&& t.getStatus() == TicketStatus.CREATED || t.getStatus() == TicketStatus.OPENED) {
+				usersTickets.add(t);
+				System.out.println("#" +i +" "+ t.getDescription() + " Severity: " + t.getSeverityString() +"\n");
+				i++;
 			}
 		}
-		System.out.println("");
+		System.out.println("1) Change a Ticket Status");
+		System.out.println("2) Return to main menu");
 
-		ShowWelcomeScreen();
+		Integer menuSelection = captureInputInt("");
+		if (menuSelection == 1) {
+			Integer ticketNumber = captureInputInt("Please type the ticket Number:") - 1;
+
+			Ticket selectedTicket = null;
+			try {
+				selectedTicket = usersTickets.get(ticketNumber);
+			} catch (Exception e) {
+				System.out.println("Invalid ticket selection");
+			}
+
+			if (selectedTicket != null) {
+				selectedTicket.setStatus(TicketStatus.OPENED);
+				System.out.println("");
+				System.out.println(selectedTicket.getDescription() +" Status: " + selectedTicket.getStatus().toString());
+
+				System.out.println("1) Set Ticket Status to UNRESOLVED");
+				System.out.println("2) Set Ticket Status to RESOLVED");
+				System.out.println("3) Return to main menu");
+
+				menuSelection = captureInputInt("");
+
+				if (menuSelection == 1) {
+					selectedTicket.setStatus(TicketStatus.CLOSED_UNRESOLVED);
+					System.out.println("Ticket Status set to UNRESOLVED");
+				}
+
+				else if (menuSelection == 2) {
+					selectedTicket.setStatus(TicketStatus.CLOSED_RESOLVED);
+					System.out.println("Ticket Status set to RESOLVED");
+				}
+
+				else if (menuSelection == 3) {
+					ShowWelcomeScreen();
+				}
+
+
+			} else {
+				System.out.println("Invalid ticket");
+			}
+		} else {
+			ShowWelcomeScreen();
+		}
+	}
+
+	private void ShowTicketReport() {
+		System.out.println("");
+		System.out.println("---------------------");
+		System.out.println("Ticket Report");
+		System.out.println("---------------------");
+
+		System.out.println("Please enter a starting date for the reporting range as YYYY-MM-DD");
+		LocalDate startDate = captureInputDate("");
+
+		System.out.println("Please enter an ending date for the reporting range as YYYY-MM-DD");
+		LocalDate endDate = captureInputDate("");
+
+		if (startDate.isAfter(endDate)) {
+			System.out.println("Start date is after end date");
+			return;
+		}
+
+		System.out.println("\n------------------------------------------------------------");
+		System.out.println("Report range set between " + startDate.toString() + " and " + endDate.toString() +"\n");
+
+		List<Ticket> reportTickets = new ArrayList<Ticket>();
+
+		for (Ticket t : tickets) {
+			if (t.getOwnerEmail().equals(active_user.getEmail())) {
+				if (t.getCreatedDate().isAfter(startDate) || t.getCreatedDate().isEqual(startDate)) {
+					if (t.getCreatedDate().isBefore(endDate) || t.getCreatedDate().isEqual(endDate)) {
+						reportTickets.add(t);
+					}
+				}
+			}
+		}
+		
+		System.out.println("A total of " + reportTickets.size() + " have been created in this timeframe\n");
+		System.out.println("Unresolved:");
+		int unresolvedCount = 0;
+		for (Ticket t : reportTickets) {
+			if (t.getStatus() == TicketStatus.CREATED || t.getStatus() == TicketStatus.OPENED || t.getStatus() == TicketStatus.CLOSED_UNRESOLVED) {
+				System.out.println(t.getDescription() + " \nCreated by: " 
+					+ t.getCreatedByEmail() + " on " + t.getCreatedDate().toString() 
+					+ " Severity: " + t.getSeverityString() + "\n");
+				unresolvedCount++;
+			}
+		}
+
+		System.out.println("Resolved:");
+		int resolvedCount = 0;
+		for (Ticket t : reportTickets) {
+			if (t.getStatus() == TicketStatus.CLOSED_RESOLVED) {
+				if (t.getStatus() == TicketStatus.CLOSED_RESOLVED) resolvedCount++;
+				if (t.getStatus() == TicketStatus.CLOSED_UNRESOLVED) unresolvedCount++;
+
+				System.out.println(t.getDescription() + " \nSubmitted By: " + t.getCreatedByEmail() 
+					+ " on " + t.getCreatedDate().toString() +" \nand took " 
+					+ ChronoUnit.DAYS.between(t.getCreatedDate(), t.getResolvedDate()) 
+					+" days to resolve by: " + t.getOwnerEmail() + "\n");
+			}
+		}
+
+		System.out.println("Unresolved Tickets:" + unresolvedCount + " Resolved tickets: " + resolvedCount);
+		System.out.println("------------------------------------------------------------\n\n");
 	}
 
 	private int captureInputInt(String userMessage) {
 		// handles the user input and returns an int
-		System.out.print(userMessage + " ");
+		if (userMessage.length() > 0) {
+			System.out.print(userMessage + " ");
+		}
+
 		this.userInputScanner = new Scanner(System.in);
 		int capturedInt;
 		try {
@@ -294,12 +425,14 @@ public final class MenuSystem {
 	
 	private String captureInputString(String userMessage) {
 		// handles the user input and returns a string
-		System.out.print(userMessage + " ");
+		if (userMessage.length() > 0) {
+			System.out.print(userMessage + " ");
+		}
 
 		this.userInputScanner = new Scanner(System.in);
 		String capturedStr;
 		try {
-			capturedStr = userInputScanner.nextLine();
+			capturedStr = userInputScanner.nextLine().trim();
 			return capturedStr;
 		} catch (Exception ex) {
 			showInvalidOption();
@@ -307,7 +440,25 @@ public final class MenuSystem {
 			return "";
 		}
 	}
-	
+
+	private LocalDate captureInputDate(String userMessage) {
+		// handles the user input and returns a Date object
+		if (userMessage.length() > 0) {
+			System.out.print(userMessage + " ");
+		}
+
+		this.userInputScanner = new Scanner(System.in);
+		String capturedStr;
+		try {
+			capturedStr = userInputScanner.nextLine().trim();
+			return LocalDate.parse(capturedStr);
+		} catch (Exception ex) {
+			System.out.print("Please enter a valid date YYYY-MM-DD");
+			userInputScanner.nextLine();
+			return null;
+		}
+	}
+
 	private void showInvalidOption() {
 		System.out.println("Invalid menu option.");
 	}
