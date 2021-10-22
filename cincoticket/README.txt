@@ -15,7 +15,7 @@ java -cp . JavaApp
 ## USE
 ### Staff Member Account Creation
 From the main menu, select option '1' to create a staff member account.
-Enter the required information in to the prompts, and if validated 
+Enter the required information in to the prompts, and if validated
 correctly (see password requirements below), you will now be able
 to login as a staff member using these credentials.
 
@@ -26,11 +26,11 @@ above and then those credentials used to log in. Alternatively, we have
 provided 2 hardcoded user accounts already in the system for that can
 be used for testing:
 
-- Email: 	john_citizen@cinco.com  
-  Password: 	ZXCVBNMasdfghjkl123456  
+- Email: 	john_citizen@cinco.com
+  Password: 	ZXCVBNMasdfghjkl123456
   
-- Email:	fred_jones@cinco.com  
-  Password:	ASDFGHJKqwertyu1234678  
+- Email:	fred_jones@cinco.com
+  Password:	ASDFGHJKqwertyu1234678
 		
 To log in as a technician, see below a list of account details.
 
