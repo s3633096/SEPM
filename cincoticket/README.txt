@@ -28,6 +28,7 @@ to login as a staff member using these credentials.
 *Note that as we have not implemented a database yet, new accounts will 
 only pertain to the current session of the application.
 
+
 ### Logging In: Technicians or Staff Members
 From the main menu, select option '2' to Login as either a Technician
 or a staff member. For staff members, an account can be created as per
