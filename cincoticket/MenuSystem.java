@@ -39,14 +39,12 @@ public final class MenuSystem {
 			}
 			else if (option == 4)
 				Exit();
-			
 			else {
 				showInvalidOption();
 			}
 		}
 	}
 
-	
 	private void SeedUsers() {
 		//Techs as mentioned in spec sheet
 		users.add(new User("harry_styles@cinco.com", "Harry Styles", "0400123456", "123abcABC123abcABC12", 1));
@@ -80,6 +78,10 @@ public final class MenuSystem {
 		tickets.add(new Ticket("High severity test ticket", 1, "john_citizen@cinco.com", "zayn_malik@cinco.com", LocalDate.parse("2021-10-20")));
 		tickets.add(new Ticket("Medium severity test ticket", 2, "fred_jones@cinco.com", "zayn_malik@cinco.com", LocalDate.parse("2021-06-01")));
 		tickets.add(new Ticket("Low severity test ticket", 3, "john_citizen@cinco.com", "zayn_malik@cinco.com", LocalDate.parse("2021-09-01")));
+		
+		tickets.get(0).setStatus(TicketStatus.CLOSED_RESOLVED);
+		tickets.get(4).setStatus(TicketStatus.CLOSED_UNRESOLVED);
+		tickets.get(7).setStatus(TicketStatus.CLOSED_RESOLVED);
 	}
 
 	private void CreateStaffAccount() {
@@ -120,7 +122,7 @@ public final class MenuSystem {
 	
 	private void Login() {
 
-		String email = captureInputString("Username: ");
+		String email = captureInputString("Username / Email: ");
 		String password = captureInputString("Password: ");
 
 		for (User u : users) {
@@ -145,12 +147,20 @@ public final class MenuSystem {
 		if (active_user != null) {
 			System.out.println("");
 			System.out.println("------------------------------------------");
-			System.out.println(" Welcome " + active_user.getEmail() );
+			System.out.println(" Welcome, " + active_user.getName() );
 			System.out.println("------------------------------------------");
 
 			int option = 0;
-
-			while (option != 3) {
+			int logoutOption;
+			if (active_user.isTech()) {
+				logoutOption = 5;
+			}
+			else {
+				logoutOption = 4;
+			}
+			
+			
+			while (option != logoutOption) {
 				if (active_user == null) {
 					return;
 				}
@@ -158,14 +168,16 @@ public final class MenuSystem {
 				System.out.println("Please select from the following options:");
 				if(!active_user.isTech()) {
 					System.out.println("1) Create a Ticket");
-					System.out.println("2) Change your password");
-					System.out.println("3) Log Out");
+					System.out.println("2) View your open tickets");					
+					System.out.println("3) Change your password");
+					System.out.println("4) Log Out");
 				}
 				else if(active_user.isTech()) {
-					System.out.println("1) View assigned tickets");
+					System.out.println("1) View your open tickets");
 					System.out.println("2) Change your password");
 					System.out.println("3) Create Ticket Report");
-					System.out.println("4) Log Out");
+					System.out.println("4) View all closed Tickets");
+					System.out.println("5) Log Out");
 				}
 				
 	
@@ -176,9 +188,12 @@ public final class MenuSystem {
 						CreateTicket();
 					}
 					else if (option == 2) {
+						ShowUserTickets();
+					}
+					else if (option == 3) {
 						ChangePassword();
 					}
-					else if (option == 3){
+					else if (option == 4){
 						active_user = null;
 						System.out.println("Logging out...");
 					}
@@ -197,8 +212,11 @@ public final class MenuSystem {
 						ShowTicketReport();
 					}
 					else if (option == 4){
+						ShowClosedTickets();
+					}
+					else if (option == 5) {
 						active_user = null;
-						System.out.println("Logging out...");
+						System.out.println("Logging out...");						
 					}
 					else {
 						showInvalidOption();
@@ -271,7 +289,7 @@ public final class MenuSystem {
 		int input_priority = captureInputInt("Priority: 1 (high), 2 (med), 3 (low)");
 
 		this.tickets.add(
-			new Ticket(input_description, input_priority, active_user.getEmail(), active_user.getEmail(), LocalDate.now())
+			new Ticket(input_description, input_priority, active_user.getEmail(), "", LocalDate.now())
 		);
 
 		System.out.println("The ticket has been added to the queue.");
@@ -282,66 +300,123 @@ public final class MenuSystem {
 	private void ShowUserTickets() {
 		System.out.println("");
 		System.out.println("------------------------------------------");
-		System.out.println("The following tickets are assigned to you:\n(Ordered by status then severity)\n");
+		if (active_user.isTech()) {
+			System.out.println("Assigned Tickets (ordered by severity):\n");
+		}
+		else {
+			System.out.println("Currently Open Tickets (ordered by severity):\n");
+		}
 		
 		this.tickets.sort((t1, t2) -> t1.getSeverity() - t2.getSeverity());
 		this.tickets.sort((t1, t2) -> t1.getStatus().compareTo(t2.getStatus()));
 
 		List<Ticket> usersTickets = new ArrayList<Ticket>();
+		if (active_user.isTech()) {
+			int i = 1; // matches ticket index in list
+			for (Ticket t : tickets) {
+				if (t.getOwnerEmail().equals(this.active_user.getEmail()) && t.getStatus() == TicketStatus.OPEN) {
+					usersTickets.add(t);
+					System.out.println("#" + i +" "+ t.getDescription() + " | Severity: " + t.getSeverityString() +
+							" | Status: " + t.getStatus() + "\n");
+					i++;
+				}
+			}
+		
+		
+			System.out.println("1) Change a Ticket Status");
+			System.out.println("2) Return to main menu");
+
+			Integer menuSelection = captureInputInt("");
+			if (menuSelection == 1) {
+				Integer ticketNumber = captureInputInt("Please type the ticket Number:") - 1;
+
+				Ticket selectedTicket = null;
+				try {
+					selectedTicket = usersTickets.get(ticketNumber);
+				} catch (Exception e) {
+					System.out.println("Invalid ticket selection");
+				}
+
+				if (selectedTicket != null) {
+					System.out.println("");
+					System.out.println(selectedTicket.getDescription() +" Status: " + selectedTicket.getStatus().toString());
+
+					System.out.println("1) Set Ticket Status to UNRESOLVED");
+					System.out.println("2) Set Ticket Status to RESOLVED");
+					System.out.println("3) Return to main menu");
+
+					menuSelection = captureInputInt("");
+
+					if (menuSelection == 1) {
+						selectedTicket.setStatus(TicketStatus.CLOSED_UNRESOLVED);
+						System.out.println("Ticket Status set to UNRESOLVED");
+					}
+
+					else if (menuSelection == 2) {
+						selectedTicket.setStatus(TicketStatus.CLOSED_RESOLVED);
+						System.out.println("Ticket Status set to RESOLVED");
+					}
+
+					else if (menuSelection == 3) {
+						return;
+					}
+
+
+				} else {
+					System.out.println("Invalid ticket");
+				}
+			} else {
+				return;
+			}
+		}
+		
+		else {
+			int i = 1; // matches ticket index in list
+			for (Ticket t : tickets) {
+				if (t.getCreatedByEmail().equals(this.active_user.getEmail()) && t.getStatus() == TicketStatus.OPEN) {
+					usersTickets.add(t);
+					System.out.println("#" + i +" "+ t.getDescription() + " | Severity: " + t.getSeverityString() +
+							" | Status: " + t.getStatus() + "\n");
+					i++;
+				}
+			}
+			
+			System.out.println("1) Return to main menu");
+			Integer menuSelection = captureInputInt("");
+			if (menuSelection == 1) {
+				return;
+			}
+			else {
+				return;
+			}
+		}
+
+	}
+	
+	private void ShowClosedTickets() {
+		System.out.println("");
+		System.out.println("------------------------------------------");
+		System.out.println("All closed and archived tickets:\n(Ordered by severity)\n");
+		
+		this.tickets.sort((t1, t2) -> t1.getSeverity() - t2.getSeverity());
+		this.tickets.sort((t1, t2) -> t1.getStatus().compareTo(t2.getStatus()));
 
 		int i = 1; // matches ticket index in list
 		for (Ticket t : tickets) {
-			if (t.getOwnerEmail().equals(this.active_user.getEmail())) {
-				usersTickets.add(t);
+			if (t.getOwnerEmail().equals(this.active_user.getEmail()) && t.getStatus() != TicketStatus.OPEN) {
 				System.out.println("#" + i +" "+ t.getDescription() + " | Severity: " + t.getSeverityString() +
 						" | Status: " + t.getStatus() + "\n");
 				i++;
 			}
 		}
-		System.out.println("1) Change a Ticket Status");
-		System.out.println("2) Return to main menu");
-
+		
+		System.out.println("1) Return to main menu");
 		Integer menuSelection = captureInputInt("");
 		if (menuSelection == 1) {
-			Integer ticketNumber = captureInputInt("Please type the ticket Number:") - 1;
-
-			Ticket selectedTicket = null;
-			try {
-				selectedTicket = usersTickets.get(ticketNumber);
-			} catch (Exception e) {
-				System.out.println("Invalid ticket selection");
-			}
-
-			if (selectedTicket != null) {
-				System.out.println("");
-				System.out.println(selectedTicket.getDescription() +" Status: " + selectedTicket.getStatus().toString());
-
-				System.out.println("1) Set Ticket Status to UNRESOLVED");
-				System.out.println("2) Set Ticket Status to RESOLVED");
-				System.out.println("3) Return to main menu");
-
-				menuSelection = captureInputInt("");
-
-				if (menuSelection == 1) {
-					selectedTicket.setStatus(TicketStatus.CLOSED_UNRESOLVED);
-					System.out.println("Ticket Status set to UNRESOLVED");
-				}
-
-				else if (menuSelection == 2) {
-					selectedTicket.setStatus(TicketStatus.CLOSED_RESOLVED);
-					System.out.println("Ticket Status set to RESOLVED");
-				}
-
-				else if (menuSelection == 3) {
-					ShowWelcomeScreen();
-				}
-
-
-			} else {
-				System.out.println("Invalid ticket");
-			}
-		} else {
-			ShowWelcomeScreen();
+			return;
+		}
+		else {
+			return;
 		}
 	}
 
@@ -403,7 +478,7 @@ public final class MenuSystem {
 		System.out.println("Unresolved Tickets:" + unresolvedCount + " Resolved tickets: " + resolvedCount);
 		System.out.println("------------------------------------------------------------\n\n");
 
-		ShowWelcomeScreen();
+		return;
 	}
 
 	private int captureInputInt(String userMessage) {

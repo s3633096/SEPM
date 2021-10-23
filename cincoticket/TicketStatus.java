@@ -1,7 +1,8 @@
 public enum TicketStatus {
     OPEN("Open"),
     CLOSED_RESOLVED("Closed and Resolved"),
-    CLOSED_UNRESOLVED("Closed and Unresolved");
+    CLOSED_UNRESOLVED("Closed and Unresolved"),
+    ARCHIVED("Archived");
     
 	
 	private String string;
