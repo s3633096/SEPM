@@ -9,13 +9,13 @@ public class Ticket {
     private LocalDate resolvedDate;
     private TicketStatus status;
 
-    public Ticket(String description, Integer severity, String createdByEmail, String ownerEmail) {
+    public Ticket(String description, Integer severity, String createdByEmail, String ownerEmail, LocalDate date) {
         this.description = description;
         this.severity = severity;
         this.createdByEmail = createdByEmail;
         this.ownerEmail = ownerEmail;
-        this.createdDate = LocalDate.now();
-        this.status = TicketStatus.CREATED;
+        this.createdDate = date;
+        this.status = TicketStatus.OPEN;
     }
 
     public String getDescription() {
@@ -61,7 +61,7 @@ public class Ticket {
     public void setStatus(TicketStatus status) {
         if (status == TicketStatus.CLOSED_RESOLVED || status == TicketStatus.CLOSED_UNRESOLVED) {
             this.resolvedDate = LocalDate.now();
-        } else if (status == TicketStatus.CREATED) {
+        } else if (status == TicketStatus.OPEN) {
             this.resolvedDate = null;
         }
 

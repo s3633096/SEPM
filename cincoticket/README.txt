@@ -26,11 +26,11 @@ above and then those credentials used to log in. Alternatively, we have
 provided 2 hardcoded user accounts already in the system for that can
 be used for testing:
 
-- Email: 	john_citizen@cinco.com
-  Password: 	ZXCVBNMasdfghjkl123456
+- Email:      john_citizen@cinco.com
+  Password:   ZXCVBNMasdfghjkl123456
   
-- Email:	fred_jones@cinco.com
-  Password:	ASDFGHJKqwertyu1234678
+- Email:      fred_jones@cinco.com
+  Password:   ASDFGHJKqwertyu1234678
 		
 To log in as a technician, see below a list of account details.
 
@@ -39,25 +39,25 @@ The following credentials are currently hardcoded
 and can be used to access technician accounts.
 Their technician levels are also noted below.
 
-- Email: 	harry_styles@cinco.com
-  Password: 	123abcABC123abcABC12
-  Level:	1
+- Email:      harry_styles@cinco.com
+  Password:   123abcABC123abcABC12
+  Level:      1
 
-- Email: 	niall_horan@cinco.com
-  Password: 	456defDEF456defDEF45
-  Level:	1
+- Email:      niall_horan@cinco.com
+  Password:   456defDEF456defDEF45
+  Level:      1
 
-- Email: 	liam_payne@cinco.com
-  Password: 	789ghiGHI789ghiGHI78
-  Level:	1
+- Email:      liam_payne@cinco.com
+  Password:   789ghiGHI789ghiGHI78
+  Level:      1
 
-- Email: 	louis_tomlinson@cinco.com
-  Password: 	cba321CBA321cbaCBA32
-  Level:	2
+- Email:      louis_tomlinson@cinco.com
+  Password:   cba321CBA321cbaCBA32
+  Level:      2
 
-- Email: 	zayn_malik@cinco.com
-  Password: 	654fedFED654fedFED65
-  Level:	2
+- Email:      zayn_malik@cinco.com
+  Password:   654fedFED654fedFED65
+  Level:      2
 
 ### Change Password
 Whilst logged out, from the main menu, select option 3) Change Password. 

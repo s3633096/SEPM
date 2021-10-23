@@ -6,8 +6,6 @@ public class User {
 	private String password;
 	private int technician;
 	
-	// @Jesse, I changed technician marker to an int. Logic will be 0 = Staff Member, 1 = L1 Tech, 2 = L2 Tech.
-	
 	public User(String email, String name, String phone, String password, int technician) {
 		this.email = email;
 		this.name = name;

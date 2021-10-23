@@ -162,7 +162,7 @@ public final class MenuSystem {
 					System.out.println("3) Log Out");
 				}
 				else if(active_user.isTech()) {
-					System.out.println("1) View open tickets");
+					System.out.println("1) View assigned tickets");
 					System.out.println("2) Change your password");
 					System.out.println("3) Create Ticket Report");
 					System.out.println("4) Log Out");
@@ -282,18 +282,19 @@ public final class MenuSystem {
 	private void ShowUserTickets() {
 		System.out.println("");
 		System.out.println("------------------------------------------");
-		System.out.println("The following tickets are assigned to you:\n");
-
+		System.out.println("The following tickets are assigned to you:\n(Ordered by status then severity)\n");
+		
 		this.tickets.sort((t1, t2) -> t1.getSeverity() - t2.getSeverity());
+		this.tickets.sort((t1, t2) -> t1.getStatus().compareTo(t2.getStatus()));
 
 		List<Ticket> usersTickets = new ArrayList<Ticket>();
 
 		int i = 1; // matches ticket index in list
 		for (Ticket t : tickets) {
-			if (t.getOwnerEmail().equals(this.active_user.getEmail()) 
-			&& t.getStatus() == TicketStatus.OPENED) {
+			if (t.getOwnerEmail().equals(this.active_user.getEmail())) {
 				usersTickets.add(t);
-				System.out.println("#" +i +" "+ t.getDescription() + " Severity: " + t.getSeverityString() +"\n");
+				System.out.println("#" + i +" "+ t.getDescription() + " | Severity: " + t.getSeverityString() +
+						" | Status: " + t.getStatus() + "\n");
 				i++;
 			}
 		}
@@ -378,7 +379,7 @@ public final class MenuSystem {
 		System.out.println("Unresolved:");
 		int unresolvedCount = 0;
 		for (Ticket t : reportTickets) {
-			if (t.getStatus() == TicketStatus.OPENED) {
+			if (t.getStatus() == TicketStatus.OPEN) {
 				System.out.println(t.getDescription() + " \nCreated by: " 
 					+ t.getCreatedByEmail() + " on " + t.getCreatedDate().toString() 
 					+ " Severity: " + t.getSeverityString() + "\n");
