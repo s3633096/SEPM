@@ -19,7 +19,6 @@ packages for your system please see: https://openjdk.java.net
 
 
 ## USE
-
 ### Account Creation: Staff Members
 From the main menu, select option '1' to create a staff member account.
 Enter the required information in to the prompts, and if validated
@@ -31,8 +30,10 @@ only pertain to the current session of the application.
 
 
 ### Create a Ticket: Staff Members
-To create a ticket, log in as a staff member (use a hardcoded account above
-or alternatively create one using menu option '1' on the initial menu).
+To create a ticket, log in as a staff member (use a hardcoded account 
+listed below or alternatively create one using menu option '1' on the 
+initial menu).
+
 Once logged in, choose menu option '1'. You will be prompted to enter a 
 description and a severity level. The ticket will be created in an 'Open'
 state, and remain unassigned until claimed by a technician (yet to be 
@@ -51,7 +52,12 @@ be used for testing:
   
 - Email:      fred_jones@cinco.com
   Password:   ASDFGHJKqwertyu1234678
-		
+
+Simply enter the email and password in to the relevant prompts.
+If entered correctly, the user will be directed to their menu,
+which differs depending if the user is a Technician or a Staff
+Member.
+
 To log in as a technician, see below a list of account details.
 
 
