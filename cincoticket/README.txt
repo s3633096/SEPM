@@ -84,7 +84,9 @@ initial menu).
 Once logged in, choose menu option '1'. You will be prompted to enter a 
 description and a severity level. The ticket will be created in an 'Open'
 state, and remain unassigned until claimed by a technician (yet to be 
-implemented).
+implemented). To view the newly created ticket, from the Staff Members main menu,
+select option '2'. It will be displayed in this list (note that tickets are sorted 
+by severity).
 
 
 ### Change Password: Technicians or Staff Members
