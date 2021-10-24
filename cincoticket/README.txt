@@ -33,7 +33,7 @@ only pertain to the current session of the application.
 From the main menu, select option '2' to Login as either a Technician
 or a staff member. For staff members, an account can be created as per
 above and then those credentials used to log in. Alternatively, we have
-provided 2 hardcoded user accounts already in the system for that can
+provided 2 hardcoded user accounts already in the system that can
 be used for testing:
 
 - Email:      john_citizen@cinco.com
@@ -111,7 +111,8 @@ The current password requirements for the application are as follows:
 
 ### Viewing and Closing Tickets: Technicians
 When logged in as a Technician, you can see all open tickets assigned the 
-Technician using option '1'. From here, tickets can be marked as closed by
+Technician using option '1' (Hardcoded sample tickets while we implement the 
+functionality, for testing purposes). From here, tickets can be marked as closed by
 following the menu prompts.
 To view all closed tickets (regardless of assignment), use menu option '4'
 when logged in as a Technician.
@@ -119,8 +120,13 @@ when logged in as a Technician.
 
 ### Generating a report: Technicians
 To generate a report of all tickets during a specified time range, select 
-option '3'. Now enter a start and end date in the format specified and the
+option '3' from main menu. Now enter a start and end date in the format specified and the
 system will generate a report of tickets created in the date range, 
 differentiated by Resolved or Unresolved (Open or Closed). For resolved 
-tickets, the time of resolution will be displayed.
+tickets it will display the email of the staff member who submitted the ticket, 
+the email of the technician it was assigned to, and the time taken between creation and 
+resolution in days. 
+For outstanding tickets, the report will indicate the email of the staff member 
+who submitted the ticket, date when it was submitted, and the severity it has been 
+classified with.
 
